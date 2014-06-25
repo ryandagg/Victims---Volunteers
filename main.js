@@ -1,13 +1,12 @@
-
-// var victimsTotal = prompt("How many victims are there?");
+var victimsTotal = prompt("How many victims are there?");
 
 // create a for loop that creates a new object for total amount of victims?
 // this should be fun...
-var people_list = []
+var peopleList = []
 
 var victimGenerator = function(total, volOrVic) {
 	for (var vic = 1; vic <= total; vic++) {
-		people_list.push(window["vic"+String(vic)] = {
+		peopleList.push(window["vic"+String(vic)] = {
 			name : prompt("What is their name?"),
 			phone : prompt("What is their phone number?"),
 			street : prompt("What is their street?"),
@@ -15,6 +14,7 @@ var victimGenerator = function(total, volOrVic) {
 		})
 	}
 }
+
 var totalVics = +prompt("How many victims are there?")
 victimGenerator(totalVics, "vic");
 
@@ -23,23 +23,43 @@ victimGenerator(totalVols, "vol");
 
 var vicNames = ''
 for (var i = 0; i < totalVics; i++) {
-	if(people_list[i].status === "vic") {
-		vicNames += people_list[i].name + ", " ;
+	if(peopleList[i].status === "vic") {
+		vicNames += peopleList[i].name + ", " ;
 	}
 }
 
 var volNames = ''
-for (var i = totalVics; i < people_list.length - 1; i++) {
-	if(people_list[i].status === "vol") {
-		volNames += people_list[i].name + ", " ;
+for (var i = totalVics; i < peopleList.length; i++) {
+	if(peopleList[i].status === "vol") {
+		volNames += peopleList[i].name + ", " ;
 	}
 }
 
 alert("There are " + String(totalVics) + " victims, and " + String(totalVols) + 
 	" volunteers. \nThe victims are " + vicNames + "\nThe volunteers are " + volNames)
 
-var to_help = prompt("Who needs help?")
 // check if name matches a vic, then check for vols on same street
-for (var i = 0; i < totalVics; i++) {
-	if(people_list[i].status === "vics" && to_help === people_list[i].name)
+var checkIfVic = function() {
+	var toHelp = prompt("Who needs help?")
+	for(var i = 0; i < peopleList.length; i++) {
+		if (peopleList[i].status === "vic" && peopleList[i].name === toHelp) {
+			return [peopleList[i].street, peopleList[i].name];
+		}
+	}
+	alert("That is not a victim!")
+	return checkIfVic(); // Need to avoid infinite alert box issue
 }
+
+var inNeedMatch = function() {
+	var toHelp = checkIfVic();
+	var nameH = toHelp[1];
+	var streetH = toHelp[0];
+	for (i = 0; i < peopleList.length; i++) {
+		if (peopleList[i].status === "vol" && peopleList[i].street === streetH) {
+			alert(peopleList[i].name + " lives on " + streetH + " and can help " + nameH + "!")
+		}
+	}
+	alert("No one is nearby.")
+}
+
+inNeedMatch();
